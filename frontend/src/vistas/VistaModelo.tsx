@@ -102,7 +102,7 @@ function ModeloDeSismos({ zona }: { zona: Zona }) {
       </p>
 
       <div className="cifras">
-        <Cifra valor={porcentaje(elegido.accuracy, 1)} rotulo="exactitud en datos que no vio" destacada />
+        <Cifra valor={porcentaje(elegido.accuracy, 1)} rotulo="accuracy en datos que no vio" destacada />
         <Cifra valor={porcentaje(elegido.f1_macro, 1)} rotulo="F1 macro (pesa igual los tres niveles)" destacada />
         <Cifra valor={porcentaje(elegido.recall_alto, 1)} rotulo="de los casos de nivel Alto, detectados" />
         <Cifra valor={numero(datos.muestras_entrenamiento)} rotulo={`casos de entrenamiento · ${datos.periodo_entrenamiento.join(' a ')}`} />
@@ -114,7 +114,7 @@ function ModeloDeSismos({ zona }: { zona: Zona }) {
           titulo="Comparación con reglas sin aprendizaje"
           nota={
             zona === 'santander'
-              ? 'Aquí la exactitud sola engaña: más del 90 % de los casos son de nivel Bajo. Lo que cuenta es el F1 macro.'
+              ? 'Aquí el accuracy solo engaña: más del 90 % de los casos son de nivel Bajo. Lo que cuenta es el F1 macro.'
               : 'El modelo no llega al 100 % porque los sismos tienen azar: ni conociendo la tasa real de cada celda se supera el techo.'
           }
         >
@@ -122,7 +122,7 @@ function ModeloDeSismos({ zona }: { zona: Zona }) {
             <thead>
               <tr>
                 <th>Modelo</th>
-                <th className="num">Exactitud</th>
+                <th className="num">Accuracy</th>
                 <th className="num">F1 macro</th>
                 <th className="num">Recall Alto</th>
               </tr>
@@ -146,7 +146,7 @@ function ModeloDeSismos({ zona }: { zona: Zona }) {
           </table>
           <p className="veredicto">
             Supera a la regla «igual al trimestre anterior» por {numero((elegido.accuracy - persistencia.accuracy) * 100, 1)}{' '}
-            puntos de exactitud y {numero((elegido.f1_macro - persistencia.f1_macro) * 100, 1)} de F1, y llega al{' '}
+            puntos de accuracy y {numero((elegido.f1_macro - persistencia.f1_macro) * 100, 1)} de F1, y llega al{' '}
             {porcentaje(elegido.accuracy / datos.techo_del_problema.accuracy)} del techo.
           </p>
         </Cuadro>
