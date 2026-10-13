@@ -10,7 +10,7 @@
   --aviso-borde: #e3b341;
   --error-fondo: #fdecec;
   --error-borde: #d03b3b;
-  --ancho-panel: 404px;
+  --ancho-panel: 430px;
 }
 
 * {
@@ -26,7 +26,7 @@ body,
 
 body {
   font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.45;
   color: var(--tinta);
   background: var(--plano);
@@ -59,11 +59,11 @@ p {
 }
 
 .marca h1 {
-  font-size: 18px;
+  font-size: 19px;
 }
 
 .marca span {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--tinta-2);
 }
 
@@ -138,28 +138,28 @@ input[type='range']:focus-visible {
 
 .panel h2,
 .documento h2 {
-  font-size: 19px;
+  font-size: 20px;
 }
 
 h3 {
-  font-size: 15px;
+  font-size: 16px;
 }
 
 h4 {
   margin-top: 4px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--tinta-2);
 }
 
 .apoyo {
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: var(--tinta-2);
 }
 
 .aviso {
   padding: 10px 12px;
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: var(--tinta-2);
   background: var(--plano);
   border-radius: 8px;
@@ -188,7 +188,7 @@ h4 {
   flex-direction: column;
   gap: 2px;
   padding: 9px 10px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--tinta-2);
   border: 1px solid var(--linea);
   border-radius: 10px;
@@ -231,7 +231,7 @@ h4 {
   gap: 4px;
   max-width: calc(100% - 24px);
   padding: 10px 12px;
-  font-size: 13px;
+  font-size: 14px;
   background: rgba(252, 252, 251, 0.94);
   border: 1px solid var(--linea);
   border-radius: 10px;
@@ -275,13 +275,13 @@ h4 {
 }
 
 .resultado-titulo {
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: var(--tinta-2);
 }
 
 .resultado-nivel {
   padding: 5px 12px;
-  font-size: 16px;
+  font-size: 17px;
   border: 2px solid;
   border-radius: 999px;
 }
@@ -292,7 +292,7 @@ h4 {
   grid-template-columns: 56px 1fr 44px;
   align-items: center;
   gap: 8px;
-  font-size: 13.5px;
+  font-size: 14.5px;
 }
 
 .barra-ancha {
@@ -326,7 +326,7 @@ h4 {
 /* Tablas */
 .tabla {
   width: 100%;
-  font-size: 13.5px;
+  font-size: 14.5px;
   border-collapse: collapse;
 }
 
@@ -370,7 +370,7 @@ h4 {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .control span {
@@ -415,7 +415,7 @@ h4 {
 
 .advertencias {
   padding: 10px 12px;
-  font-size: 13.5px;
+  font-size: 14.5px;
   background: var(--aviso-fondo);
   border: 1px solid var(--aviso-borde);
   border-radius: 8px;
@@ -519,7 +519,7 @@ h4 {
   flex: 1;
   padding: 7px 6px;
   font: inherit;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--tinta-2);
   background: none;
@@ -558,7 +558,7 @@ h4 {
 
 /* Leyenda del mapa de calor */
 .leyenda-calor {
-  width: 300px;
+  width: 330px;
 }
 
 .degradado {
@@ -572,7 +572,7 @@ h4 {
   grid-template-columns: repeat(3, 1fr);
   gap: 6px;
   color: var(--tinta-2);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .degradado-niveles div {
@@ -589,7 +589,7 @@ h4 {
 }
 
 .degradado-niveles strong {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--tinta);
 }
 
@@ -627,10 +627,10 @@ h4 {
   position: absolute;
   top: 12px;
   left: 12px;
-  width: 300px;
+  width: 330px;
   max-width: calc(100% - 160px);
   padding: 10px 12px;
-  font-size: 13px;
+  font-size: 14px;
   background: rgba(252, 252, 251, 0.94);
   border: 1px solid var(--linea);
   border-radius: 10px;
@@ -682,7 +682,7 @@ h4 {
 
 .bloque-cabecera h3 {
   flex: 1;
-  font-size: 14.5px;
+  font-size: 15.5px;
 }
 
 .bloque-icono {
@@ -706,7 +706,7 @@ h4 {
 .fuente {
   flex: none;
   padding: 2px 8px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.02em;
   color: #1d5fb0;
@@ -717,7 +717,7 @@ h4 {
 .nota {
   display: flex;
   gap: 7px;
-  font-size: 12.5px;
+  font-size: 13.5px;
   color: var(--tinta-2);
 }
 
@@ -754,7 +754,7 @@ h4 {
 }
 
 .bloque .casilla {
-  font-size: 13.5px;
+  font-size: 14.5px;
 }
 
 /* Personas que viven en el municipio del punto elegido */
@@ -775,12 +775,12 @@ h4 {
   display: flex;
   flex: 1;
   flex-direction: column;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--tinta-2);
 }
 
 .personas-del-punto strong {
-  font-size: 17px;
+  font-size: 18px;
   color: var(--tinta);
 }
 
@@ -793,7 +793,7 @@ h4 {
   display: flex;
   flex-direction: column;
   padding: 8px 10px;
-  font-size: 12.5px;
+  font-size: 13.5px;
   color: var(--tinta-2);
   background: var(--plano);
   border-left: 3px solid var(--azul);
@@ -801,7 +801,7 @@ h4 {
 }
 
 .modelo-activo strong {
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: var(--tinta);
 }
 
@@ -810,7 +810,7 @@ h4 {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 12.5px;
+  font-size: 13.5px;
   color: var(--tinta-2);
 }
 
@@ -851,7 +851,7 @@ h4 {
   display: flex;
   justify-content: space-between;
   margin-top: -6px;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--tinta-3);
 }
 
@@ -891,5 +891,178 @@ h4 {
   * {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+/* Tablero de «Los modelos» */
+/* Todo cabe en una pantalla: cabecera, resumen, fila de cifras y tres cuadros que ocupan el resto */
+.modelos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 14px 22px 16px;
+  overflow-y: auto;
+}
+
+.modelos-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+}
+
+.modelos-cabecera h2 {
+  font-size: 21px;
+}
+
+.modelos-cabecera span {
+  font-size: 14px;
+  color: var(--tinta-2);
+}
+
+.modelos-cabecera .selector {
+  flex: 1;
+  min-width: 420px;
+  max-width: 640px;
+  background: var(--superficie);
+}
+
+.modelos-cabecera .selector button {
+  padding: 9px 8px;
+  font-size: 14.5px;
+}
+
+.modelos-resumen {
+  font-size: 15px;
+  color: var(--tinta-2);
+}
+
+.modelos-resumen strong {
+  color: var(--tinta);
+}
+
+.cifras {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.cifra {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  color: var(--tinta-2);
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  border-radius: 12px;
+}
+
+.cifra strong {
+  font-size: 27px;
+  font-weight: 650;
+  line-height: 1.15;
+  color: var(--tinta);
+}
+
+.cifra-destacada {
+  color: rgba(252, 252, 251, 0.82);
+  background: var(--tinta);
+  border-color: var(--tinta);
+}
+
+.cifra-destacada strong {
+  color: var(--superficie);
+}
+
+.cuadros {
+  display: grid;
+  flex: 1;
+  gap: 12px;
+  min-height: 0;
+}
+
+.cuadros-de-sismos {
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 0.9fr);
+}
+
+.cuadros-de-viviendas {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.cuadro {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  border-radius: 12px;
+}
+
+.cuadro h3 {
+  font-size: 16px;
+}
+
+.cuadro h4 {
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.cuadro-nota {
+  margin-top: auto;
+  padding-top: 6px;
+  font-size: 13px;
+  color: var(--tinta-2);
+}
+
+.cuadro-texto {
+  font-size: 14.5px;
+  color: var(--tinta-2);
+}
+
+.cuadro-texto strong {
+  color: var(--tinta);
+}
+
+.veredicto {
+  padding: 8px 10px;
+  font-size: 14px;
+  background: var(--plano);
+  border-radius: 8px;
+}
+
+.tabla-compacta {
+  font-size: 14.5px;
+}
+
+.tabla-compacta td,
+.tabla-compacta th {
+  padding: 6px 6px;
+}
+
+.barra-de-modelo {
+  grid-template-columns: minmax(120px, 1.1fr) 1fr 52px;
+  font-size: 14px;
+}
+
+.barra-de-modelo .barra-pista {
+  height: 12px;
+}
+
+/* En pantallas angostas los cuadros pasan a una columna y la página se desplaza */
+@media (max-width: 1100px) {
+  .cifras {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cuadros-de-sismos,
+  .cuadros-de-viviendas {
+    grid-template-columns: 1fr;
   }
 }
