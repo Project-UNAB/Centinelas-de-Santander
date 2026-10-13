@@ -1,0 +1,90 @@
+{
+  "modelo_elegido": "Random Forest",
+  "periodo_entrenamiento": [
+    "2011-T1",
+    "2021-T4"
+  ],
+  "periodo_prueba": [
+    "2022-T1",
+    "2026-T3"
+  ],
+  "muestras_entrenamiento": 704,
+  "muestras_prueba": 304,
+  "umbrales_sismos": [
+    0.0,
+    3.0
+  ],
+  "metricas": {
+    "Base: clase más frecuente": {
+      "accuracy": 0.506578947368421,
+      "f1_macro": 0.22416302765647744,
+      "recall_alto": 0.0
+    },
+    "Base: igual al trimestre anterior": {
+      "accuracy": 0.7532894736842105,
+      "f1_macro": 0.6747773188674783,
+      "recall_alto": 0.8556701030927835
+    },
+    "Base: promedio del último año": {
+      "accuracy": 0.6611842105263158,
+      "f1_macro": 0.6354865024964035,
+      "recall_alto": 0.8865979381443299
+    },
+    "Regresión Logística": {
+      "accuracy": 0.756578947368421,
+      "f1_macro": 0.7171821475509662,
+      "recall_alto": 0.7938144329896907
+    },
+    "Random Forest": {
+      "accuracy": 0.7828947368421053,
+      "f1_macro": 0.7193746574991838,
+      "recall_alto": 0.8041237113402062
+    }
+  },
+  "techo_del_problema": {
+    "accuracy": 0.7927631578947368,
+    "f1_macro": 0.7242722494874975,
+    "recall_alto": 0.8969072164948454
+  },
+  "matriz_confusion": {
+    "etiquetas": [
+      "Bajo",
+      "Medio",
+      "Alto"
+    ],
+    "valores": [
+      [
+        136,
+        18,
+        0
+      ],
+      [
+        25,
+        24,
+        4
+      ],
+      [
+        2,
+        17,
+        78
+      ]
+    ]
+  },
+  "importancia_variables": {
+    "sismos_ultimo_anio": 0.1441,
+    "dist_nido_km": 0.1423,
+    "sismos_trimestre": 0.1272,
+    "log_energia_ultimo_anio": 0.1212,
+    "sismos_vecinos_ultimo_anio": 0.086,
+    "mag_max_ultimo_anio": 0.0759,
+    "prof_std_ultimo_anio": 0.0656,
+    "trimestres_desde_sismo_fuerte": 0.0475,
+    "sismos_promedio_historico": 0.0462,
+    "mag_media_ultimo_anio": 0.0384,
+    "prop_moderados_ultimo_anio": 0.0372,
+    "prof_media_ultimo_anio": 0.0291,
+    "tendencia_sismos": 0.0164,
+    "lon_center": 0.0151,
+    "lat_center": 0.0079
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "modelo_elegido": "Random Forest",
+  "periodo_entrenamiento": [
+    "2011-T1",
+    "2021-T4"
+  ],
+  "periodo_prueba": [
+    "2022-T1",
+    "2026-T3"
+  ],
+  "muestras_entrenamiento": 1320,
+  "muestras_prueba": 570,
+  "umbrales_sismos": [
+    0.0,
+    3.0
+  ],
+  "ajustes": {
+    "balanceo": 0.75,
+    "profundidad": 6,
+    "validacion_interna": [
+      {
+        "balanceo": 0.75,
+        "profundidad": 6,
+        "accuracy": 0.8083,
+        "f1_macro": 0.6945,
+        "recall_alto": 0.7905
+      },
+      {
+        "balanceo": 0.75,
+        "profundidad": 10,
+        "accuracy": 0.805,
+        "f1_macro": 0.6908,
+        "recall_alto": 0.7962
+      },
+      {
+        "balanceo": 1.0,
+        "profundidad": 10,
+        "accuracy": 0.7867,
+        "f1_macro": 0.6884,
+        "recall_alto": 0.7962
+      },
+      {
+        "balanceo": 0.5,
+        "profundidad": 6,
+        "accuracy": 0.8217,
+        "f1_macro": 0.6876,
+        "recall_alto": 0.7905
+      },
+      {
+        "balanceo": 1.0,
+        "profundidad": 6,
+        "accuracy": 0.7783,
+        "f1_macro": 0.6856,
+        "recall_alto": 0.7779
+      },
+      {
+        "balanceo": 0.5,
+        "profundidad": 10,
+        "accuracy": 0.82,
+        "f1_macro": 0.6833,
+        "recall_alto": 0.7946
+      },
+      {
+        "balanceo": 0.25,
+        "profundidad": 6,
+        "accuracy": 0.8217,
+        "f1_macro": 0.6759,
+        "recall_alto": 0.8005
+      },
+      {
+        "balanceo": 0.25,
+        "profundidad": 10,
+        "accuracy": 0.8217,
+        "f1_macro": 0.6743,
+        "recall_alto": 0.7905
+      },
+      {
+        "balanceo": 0.0,
+        "profundidad": 6,
+        "accuracy": 0.825,
+        "f1_macro": 0.6743,
+        "recall_alto": 0.8103
+      },
+      {
+        "balanceo": 0.0,
+        "profundidad": 10,
+        "accuracy": 0.8233,
+        "f1_macro": 0.668,
+        "recall_alto": 0.8103
+      }
+    ]
+  },
+  "metricas": {
+    "Base: clase más frecuente": {
+      "accuracy": 0.6140350877192983,
+      "f1_macro": 0.2536231884057971,
+      "recall_alto": 0.0
+    },
+    "Base: igual al trimestre anterior": {
+      "accuracy": 0.8017543859649123,
+      "f1_macro": 0.7085275987826781,
+      "recall_alto": 0.8656716417910447
+    },
+    "Base: promedio del último año": {
+      "accuracy": 0.7087719298245614,
+      "f1_macro": 0.664823212429521,
+      "recall_alto": 0.9328358208955224
+    },
+    "Regresión Logística": {
+      "accuracy": 0.7631578947368421,
+      "f1_macro": 0.7054909293593096,
+      "recall_alto": 0.8134328358208955
+    },
+    "Random Forest": {
+      "accuracy": 0.8070175438596491,
+      "f1_macro": 0.7191763635468984,
+      "recall_alto": 0.8432835820895522
+    }
+  },
+  "techo_del_problema": {
+    "accuracy": 0.8280701754385965,
+    "f1_macro": 0.7225087949119056,
+    "recall_alto": 0.917910447761194
+  },
+  "matriz_confusion": {
+    "etiquetas": [
+      "Bajo",
+      "Medio",
+      "Alto"
+    ],
+    "valores": [
+      [
+        309,
+        37,
+        4
+      ],
+      [
+        31,
+        38,
+        17
+      ],
+      [
+        1,
+        20,
+        113
+      ]
+    ]
+  },
+  "importancia_variables": {
+    "sismos_ultimo_anio": 0.1623,
+    "sismos_trimestre": 0.1547,
+    "sismos_vecinos_ultimo_anio": 0.1264,
+    "dist_nido_km": 0.124,
+    "log_energia_ultimo_anio": 0.0931,
+    "prof_std_ultimo_anio": 0.0613,
+    "mag_max_ultimo_anio": 0.0564,
+    "sismos_promedio_historico": 0.0537,
+    "prop_moderados_ultimo_anio": 0.0467,
+    "mag_media_ultimo_anio": 0.0304,
+    "trimestres_desde_sismo_fuerte": 0.0294,
+    "prof_media_ultimo_anio": 0.0212,
+    "lon_center": 0.0194,
+    "tendencia_sismos": 0.0132,
+    "lat_center": 0.0078
+  }
+}

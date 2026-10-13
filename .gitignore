@@ -1,0 +1,41 @@
+# ------------------------------------------------------------------ Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ------------------------------------------------------------------ Node
+node_modules/
+dist/
+
+# ------------------------------------------------------------------ Entorno local
+.env
+.env.local
+.env.*.local
+.vercel/
+
+# ------------------------------------------------------------------ Editor y sistema
+.vscode/
+.idea/
+.claude/
+Thumbs.db
+.DS_Store
+# Archivos de bloqueo que Office crea mientras un documento está abierto
+~$*
+
+# ------------------------------------------------------------------ Datos que no van al repositorio
+# Conjuntos que se descargaron y evaluaron pero el proyecto no usa (115 MB)
+entrenamiento/data/external/
+
+# «nuevos datos» es la carpeta de descarga: lo que el proyecto usa ya está copiado en
+# entrenamiento/data/raw. Se conservan su LEEME y el registro de descargas (fuente, dirección y hora)
+nuevos datos/*/
+
+# Modelos 3D para imprimir que TouchTerrain entrega junto al relieve: el proyecto usa el .tif (51 MB)
+*.STL
+*.stl
+
+# Catálogo limpio (34 MB): lo vuelve a generar el cuaderno de entrenamiento a partir del original
+entrenamiento/comun/data/processed/catalogo_limpio_santander.csv

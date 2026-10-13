@@ -1,0 +1,14 @@
+numpy>=2.2
+pandas>=2.3
+geopandas>=1.1
+pyogrio>=0.12
+rasterio>=1.4
+openpyxl>=3.1
+shapely>=2.1
+scikit-learn>=1.9
+scipy>=1.15
+joblib>=1.5
+matplotlib>=3.10
+
+# Solo para src/legacy/
+seaborn>=0.13

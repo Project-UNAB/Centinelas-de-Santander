@@ -1,0 +1,126 @@
+[
+  {
+    "archivo": "usgs_catalogo/sismos_usgs_santander_2006_2026.geojson",
+    "fuente": "USGS, ANSS Comprehensive Catalog",
+    "url": "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2006-01-01&minlatitude=5.6&maxlatitude=8.2&minlongitude=-74.6&maxlongitude=-72.4&orderby=time",
+    "bytes": 713305,
+    "descargado_utc": "2026-10-13T06:27:59+00:00",
+    "nota": "1010 sismos"
+  },
+  {
+    "archivo": "sgc_fallas/fallas_activas_santander.geojson",
+    "fuente": "SGC, Fallas activas de Colombia",
+    "url": "https://services1.arcgis.com/Og2nrTKe5bptW02d/arcgis/rest/services/Fallas_color/FeatureServer/796",
+    "bytes": 121249,
+    "descargado_utc": "2026-10-13T06:28:01+00:00",
+    "nota": "18 entidades; capa «Fallas activas de Colombia»"
+  },
+  {
+    "archivo": "sgc_amenaza_sismica/zonas_amenaza_sismica_0.geojson",
+    "fuente": "SGC, Zonas de Amenaza Sismica",
+    "url": "http://srvags.sgc.gov.co/arcgis/rest/services/Zonas_amenaza_Sismica_NR10/Zonas_Amenaza_NSR_10/MapServer",
+    "error": "HTTP Error 400: Bad Request"
+  },
+  {
+    "archivo": "sgc_amenaza_sismica/zonas_amenaza_sismica_1.geojson",
+    "fuente": "SGC, Zonas de Amenaza Sismica",
+    "url": "http://srvags.sgc.gov.co/arcgis/rest/services/Zonas_amenaza_Sismica_NR10/Municipios_Amenaza_NR10/MapServer",
+    "error": "HTTP Error 400: Bad Request"
+  },
+  {
+    "archivo": "datos_gov_co/nido_actividad_sismica.geojson",
+    "fuente": "Gobernación de Santander (CEGIRD), WL T NidoActSismica",
+    "url": "https://services7.arcgis.com/EUSBYj1PuyMxVZIb/arcgis/rest/services/WL_T_NidoActSismica/FeatureServer/1",
+    "bytes": 721591,
+    "descargado_utc": "2026-10-13T06:28:04+00:00",
+    "nota": "13 entidades; capa «Nido Actividad Sísmica»"
+  },
+  {
+    "archivo": "datos_gov_co/integracion_amenazas.geojson",
+    "fuente": "Gobernación de Santander (CEGIRD), WL T IntegraciónAmenazas",
+    "url": "https://services7.arcgis.com/EUSBYj1PuyMxVZIb/arcgis/rest/services/WL_T_Integraci%C3%B3nAmenazas/FeatureServer/1",
+    "bytes": 71299131,
+    "descargado_utc": "2026-10-13T06:29:23+00:00",
+    "nota": "1986 entidades; capa «Integración de Amenazas POD»; Gobernación de Santander - Secretaría TIC"
+  },
+  {
+    "archivo": "datos_gov_co/remocion_en_masa.geojson",
+    "fuente": "Gobernación de Santander (CEGIRD), WL T RemocionMasa",
+    "url": "https://services7.arcgis.com/EUSBYj1PuyMxVZIb/arcgis/rest/services/WL_T_RemocionMasa/FeatureServer/1",
+    "bytes": 14185579,
+    "descargado_utc": "2026-10-13T06:29:33+00:00",
+    "nota": "276 entidades; capa «Amenazas por Remoción en Masa»; Gobernación de Santander - Secretaría TIC"
+  },
+  {
+    "archivo": "danos_y_costos/gobernacion_santander/reporte_eventos_desastres_santander.csv",
+    "fuente": "Gobernación de Santander, datos.gov.co a4bc-a9tq",
+    "url": "https://www.datos.gov.co/api/views/a4bc-a9tq/rows.csv?accessType=DOWNLOAD",
+    "bytes": 744727,
+    "descargado_utc": "2026-10-13T06:29:34+00:00",
+    "nota": ""
+  },
+  {
+    "archivo": "danos_y_costos/ungrd_emergencias/emergencias_ungrd_2019.csv",
+    "fuente": "Unidad Nacional para la Gestión del Riesgo de Desastres (UNGRD), datos.gov.co 4fd8-ptcr",
+    "url": "https://www.datos.gov.co/api/views/4fd8-ptcr/rows.csv?accessType=DOWNLOAD",
+    "bytes": 1024704,
+    "descargado_utc": "2026-10-13T14:52:05+00:00",
+    "nota": ""
+  },
+  {
+    "archivo": "danos_y_costos/ungrd_emergencias/emergencias_ungrd_2020.csv",
+    "fuente": "Unidad Nacional para la Gestión del Riesgo de Desastres (UNGRD), datos.gov.co 4t8v-ywmw",
+    "url": "https://www.datos.gov.co/api/views/4t8v-ywmw/rows.csv?accessType=DOWNLOAD",
+    "bytes": 3303461,
+    "descargado_utc": "2026-10-13T14:52:16+00:00",
+    "nota": ""
+  },
+  {
+    "archivo": "danos_y_costos/ungrd_emergencias/emergencias_ungrd_2023_2024.csv",
+    "fuente": "Unidad Nacional para la Gestión del Riesgo de Desastres (UNGRD), datos.gov.co rgre-6ak4",
+    "url": "https://www.datos.gov.co/api/views/rgre-6ak4/rows.csv?accessType=DOWNLOAD",
+    "bytes": 15766422,
+    "descargado_utc": "2026-10-13T14:52:43+00:00",
+    "nota": ""
+  },
+  {
+    "archivo": "danos_y_costos/ungrd_emergencias/emergencias_ungrd_2025.csv",
+    "fuente": "Unidad Nacional para la Gestión del Riesgo de Desastres (UNGRD), datos.gov.co 2343-nuqp",
+    "url": "https://www.datos.gov.co/api/views/2343-nuqp/rows.csv?accessType=DOWNLOAD",
+    "bytes": 11555696,
+    "descargado_utc": "2026-10-13T14:52:59+00:00",
+    "nota": ""
+  },
+  {
+    "archivo": "danos_y_costos/dane_viviendas_y_hogares/proyecciones_viviendas_dptal_mpal_2018_2042.xlsx",
+    "fuente": "DANE, proyecciones de viviendas y hogares con base en el CNPV 2018",
+    "url": "https://www.dane.gov.co/files/operaciones/PPVH/anexo-proyecciones-viviendas-dptal-mpal-2018-2042.xlsx",
+    "bytes": 1283084,
+    "descargado_utc": "2026-10-13T14:53:00+00:00",
+    "nota": ""
+  },
+  {
+    "archivo": "danos_y_costos/dane_viviendas_y_hogares/proyecciones_hogares_dptal_mpal_2018_2042.xlsx",
+    "fuente": "DANE, proyecciones de viviendas y hogares con base en el CNPV 2018",
+    "url": "https://www.dane.gov.co/files/operaciones/PPVH/anexo-proyecciones-hogares-dptal-mpal-2018-2042.xlsx",
+    "bytes": 670894,
+    "descargado_utc": "2026-10-13T14:53:01+00:00",
+    "nota": ""
+  },
+  {
+    "archivo": "danos_y_costos/usgs_catalogo_colombia/sismos_usgs_colombia_2019_2025.geojson",
+    "fuente": "USGS, ANSS Comprehensive Catalog",
+    "url": "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2018-12-25&endtime=2026-01-05&minlatitude=-5&maxlatitude=14&minlongitude=-82&maxlongitude=-66&minmagnitude=4&orderby=time",
+    "bytes": 931981,
+    "descargado_utc": "2026-10-13T15:05:03+00:00",
+    "nota": "Sismos de magnitud 4 o mayor en Colombia y alrededores, para ubicar los sismos de las emergencias de la UNGRD"
+  },
+  {
+    "archivo": "danos_y_costos/dane_divipola/divipola_municipios.csv",
+    "fuente": "Departamento Administrativo Nacional de Estadística - DANE, datos.gov.co gdxc-w37w",
+    "url": "https://www.datos.gov.co/api/views/gdxc-w37w/rows.csv?accessType=DOWNLOAD",
+    "bytes": 70850,
+    "descargado_utc": "2026-10-13T15:05:05+00:00",
+    "nota": "Código, nombre y coordenadas de cada municipio"
+  }
+]

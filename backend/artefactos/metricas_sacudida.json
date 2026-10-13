@@ -1,0 +1,129 @@
+{
+  "modelo_elegido": "fisico_lineal",
+  "validacion": "dejando fuera un sismo completo cada vez",
+  "n_observaciones": 598,
+  "n_sismos": 86,
+  "rango_validado": {
+    "magnitud": [
+      4.5,
+      6.2
+    ],
+    "prof_km": [
+      135.34,
+      177.195
+    ],
+    "dist_hipo_km": [
+      146.4253413525647,
+      1464.7051995131212
+    ],
+    "intensidad": [
+      1.0,
+      6.4
+    ]
+  },
+  "candidatos": {
+    "fisico": {
+      "descripcion": "Cálculo físico sin ajustar (Zhao 2006 + Worden 2012)",
+      "rmse": 1.036605797917184,
+      "mae": 0.7889491052085271,
+      "sesgo": -0.42698112259091947,
+      "dentro_de_1_grado": 0.6806020066889632,
+      "exactitud_nivel": 0.939799331103679
+    },
+    "fisico_sesgo": {
+      "descripcion": "Físico + corrección constante del sesgo",
+      "rmse": 0.9637253513601151,
+      "mae": 0.7618107339191251,
+      "sesgo": 0.07633792168662225,
+      "dentro_de_1_grado": 0.7324414715719063,
+      "exactitud_nivel": 0.9364548494983278
+    },
+    "fisico_lineal": {
+      "descripcion": "Físico + regresión lineal del residuo",
+      "rmse": 0.7997256755883132,
+      "mae": 0.6145602012059033,
+      "sesgo": 0.0801633192150203,
+      "dentro_de_1_grado": 0.822742474916388,
+      "exactitud_nivel": 0.9297658862876255
+    },
+    "fisico_rf": {
+      "descripcion": "Físico + Random Forest del residuo",
+      "rmse": 0.8527891371798713,
+      "mae": 0.667251555091575,
+      "sesgo": 0.00974104065063336,
+      "dentro_de_1_grado": 0.774247491638796,
+      "exactitud_nivel": 0.9347826086956522
+    },
+    "fisico_rf_espacial": {
+      "descripcion": "Físico + Random Forest del residuo con ubicación",
+      "rmse": 0.834746126895522,
+      "mae": 0.6505615304801056,
+      "sesgo": 0.003961865196528704,
+      "dentro_de_1_grado": 0.782608695652174,
+      "exactitud_nivel": 0.9364548494983278
+    },
+    "lineal_puro": {
+      "descripcion": "Regresión lineal sin física (referencia)",
+      "rmse": 0.8083880374430482,
+      "mae": 0.628724497111091,
+      "sesgo": 0.0748631941223656,
+      "dentro_de_1_grado": 0.8193979933110368,
+      "exactitud_nivel": 0.9381270903010034
+    },
+    "rf_puro": {
+      "descripcion": "Random Forest sin física (referencia)",
+      "rmse": 0.8700064007896254,
+      "mae": 0.6792962948269797,
+      "sesgo": -0.034520013869183,
+      "dentro_de_1_grado": 0.7591973244147158,
+      "exactitud_nivel": 0.939799331103679
+    }
+  },
+  "fuente": {
+    "lat": 6.808,
+    "lon": -73.14,
+    "prof_mediana_km": 150.0,
+    "prof_p01": 140.0,
+    "prof_p99": 159.0,
+    "periodo": [
+      2006,
+      2026
+    ],
+    "recurrencia": {
+      "m_min": 4.0,
+      "b": 1.206741919181553,
+      "b_error": 0.04781285566880122,
+      "tasa_m_min": 30.6688736715202,
+      "m_max_observada": 6.4,
+      "n_eventos": 637,
+      "anios": 20.770244346845136
+    }
+  },
+  "recurrencia_observada_vs_modelo": [
+    {
+      "magnitud_min": 4.0,
+      "observados_por_anio": 30.6688736715202,
+      "modelo_por_anio": 30.6688736715202
+    },
+    {
+      "magnitud_min": 4.5,
+      "observados_por_anio": 7.703327766786863,
+      "modelo_por_anio": 7.644108926734226
+    },
+    {
+      "magnitud_min": 5.0,
+      "observados_por_anio": 1.5406655533573725,
+      "modelo_por_anio": 1.9052672722715445
+    },
+    {
+      "magnitud_min": 5.5,
+      "observados_por_anio": 0.5777495825090148,
+      "modelo_por_anio": 0.4748811684372357
+    },
+    {
+      "magnitud_min": 6.0,
+      "observados_por_anio": 0.09629159708483578,
+      "modelo_por_anio": 0.11836246148680679
+    }
+  ]
+}

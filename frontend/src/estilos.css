@@ -1,0 +1,895 @@
+:root {
+  --superficie: #fcfcfb;
+  --plano: #f4f3ef;
+  --tinta: #0b0b0b;
+  --tinta-2: #52514e;
+  --tinta-3: #898781;
+  --linea: #e1e0d9;
+  --azul: #2a78d6;
+  --aviso-fondo: #fff6df;
+  --aviso-borde: #e3b341;
+  --error-fondo: #fdecec;
+  --error-borde: #d03b3b;
+  --ancho-panel: 404px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--tinta);
+  background: var(--plano);
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Cabecera y pestañas */
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding: 10px 20px;
+  background: var(--superficie);
+  border-bottom: 1px solid var(--linea);
+}
+
+.marca h1 {
+  font-size: 18px;
+}
+
+.marca span {
+  font-size: 13px;
+  color: var(--tinta-2);
+}
+
+.pestanas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pestanas button {
+  padding: 7px 14px;
+  font: inherit;
+  font-weight: 500;
+  color: var(--tinta-2);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.pestanas button:hover {
+  background: var(--plano);
+}
+
+.pestanas button.activa {
+  color: var(--superficie);
+  background: var(--tinta);
+}
+
+.pestanas button:focus-visible,
+input[type='range']:focus-visible {
+  outline: 2px solid var(--azul);
+  outline-offset: 2px;
+}
+
+.contenido {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Mapa + panel */
+.vista {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--ancho-panel);
+  height: 100%;
+}
+
+.mapa {
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+}
+
+.mapa-3d {
+  background: var(--superficie);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  overflow-y: auto;
+  background: var(--plano);
+  border-left: 1px solid var(--linea);
+}
+
+/* Si el contenido no cabe, el panel se desplaza: ningún elemento se aplasta */
+.panel > * {
+  flex-shrink: 0;
+}
+
+.panel h2,
+.documento h2 {
+  font-size: 19px;
+}
+
+h3 {
+  font-size: 15px;
+}
+
+h4 {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--tinta-2);
+}
+
+.apoyo {
+  font-size: 13.5px;
+  color: var(--tinta-2);
+}
+
+.aviso {
+  padding: 10px 12px;
+  font-size: 13.5px;
+  color: var(--tinta-2);
+  background: var(--plano);
+  border-radius: 8px;
+}
+
+/* Fuera de un bloque el fondo del panel ya es gris: el aviso se distingue con un borde */
+.panel > .aviso {
+  background: none;
+  border: 1px dashed var(--tinta-3);
+}
+
+/* Tarjetas de cifras */
+.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 8px;
+}
+
+.tarjetas-anchas {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  margin: 16px 0;
+}
+
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 9px 10px;
+  font-size: 13px;
+  color: var(--tinta-2);
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+}
+
+.tarjeta-valor {
+  font-size: 20px;
+  white-space: nowrap;
+  font-weight: 650;
+  color: var(--tinta);
+}
+
+/* Niveles */
+.muestra {
+  display: inline-block;
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.muestra-punto {
+  border-radius: 50%;
+}
+
+.etiqueta-nivel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--tinta);
+}
+
+.leyenda {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: calc(100% - 24px);
+  padding: 10px 12px;
+  font-size: 13px;
+  background: rgba(252, 252, 251, 0.94);
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+}
+
+.leyenda-titulo {
+  font-weight: 600;
+}
+
+.leyenda-separada {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--linea);
+}
+
+.leyenda-fila {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--tinta-2);
+}
+
+.leyenda-fila strong {
+  color: var(--tinta);
+}
+
+/* Detalle de una celda */
+.detalle {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--linea);
+}
+
+.resultado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.resultado-titulo {
+  font-size: 13.5px;
+  color: var(--tinta-2);
+}
+
+.resultado-nivel {
+  padding: 5px 12px;
+  font-size: 16px;
+  border: 2px solid;
+  border-radius: 999px;
+}
+
+/* Barras horizontales */
+.barra-fila {
+  display: grid;
+  grid-template-columns: 56px 1fr 44px;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+}
+
+.barra-ancha {
+  grid-template-columns: 190px 1fr 52px;
+  margin-bottom: 5px;
+}
+
+.barra-pista {
+  height: 10px;
+  background: var(--plano);
+  border-radius: 4px;
+}
+
+.barra-relleno {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+  border-radius: 4px;
+}
+
+.barra-azul {
+  background: var(--azul);
+}
+
+.barra-valor,
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tablas */
+.tabla {
+  width: 100%;
+  font-size: 13.5px;
+  border-collapse: collapse;
+}
+
+.tabla td,
+.tabla th {
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--linea);
+}
+
+.tabla th {
+  font-weight: 600;
+  text-align: left;
+  color: var(--tinta-2);
+}
+
+.tabla th.num {
+  text-align: right;
+}
+
+.tabla td:first-child {
+  color: var(--tinta-2);
+}
+
+.tabla tr.destacada td {
+  font-weight: 650;
+  color: var(--tinta);
+  background: var(--plano);
+}
+
+.tabla tr.referencia td {
+  font-style: italic;
+}
+
+.matriz td.acierto {
+  font-weight: 650;
+  background: var(--plano);
+}
+
+/* Controles */
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.control span {
+  display: flex;
+  justify-content: space-between;
+}
+
+.control select {
+  width: 100%;
+  padding: 7px 8px;
+  font: inherit;
+  color: var(--tinta);
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  border-radius: 8px;
+}
+
+.control select:focus-visible {
+  outline: 2px solid var(--azul);
+  outline-offset: 2px;
+}
+
+.control input {
+  width: 100%;
+  accent-color: var(--tinta);
+}
+
+.interruptor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.interruptor input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--tinta);
+}
+
+
+.advertencias {
+  padding: 10px 12px;
+  font-size: 13.5px;
+  background: var(--aviso-fondo);
+  border: 1px solid var(--aviso-borde);
+  border-radius: 8px;
+}
+
+.advertencias ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+/* Estados de carga y error */
+.estado {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 520px;
+  margin: 48px auto;
+  padding: 16px 20px;
+  color: var(--tinta-2);
+  text-align: center;
+}
+
+.estado-error {
+  color: var(--tinta);
+  text-align: left;
+  background: var(--error-fondo);
+  border: 1px solid var(--error-borde);
+  border-radius: 10px;
+}
+
+/* Vista de documento (El modelo) */
+.documento {
+  max-width: 1040px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  overflow-y: auto;
+}
+
+.documento h3 {
+  margin: 22px 0 8px;
+}
+
+.documento p {
+  max-width: 78ch;
+}
+
+.documento .apoyo {
+  margin-top: 8px;
+}
+
+.tabla-completa {
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+}
+
+.tabla-completa td,
+.tabla-completa th {
+  padding: 8px 12px;
+}
+
+.columnas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 0 32px;
+}
+
+/* Pantallas angostas: el panel pasa debajo del mapa */
+@media (max-width: 860px) {
+  .vista {
+    grid-template-columns: 1fr;
+    grid-template-rows: 55vh auto;
+    height: auto;
+  }
+
+  .contenido {
+    overflow-y: auto;
+  }
+
+  .panel {
+    border-left: none;
+    border-top: 1px solid var(--linea);
+    overflow-y: visible;
+  }
+
+  .barra-ancha {
+    grid-template-columns: 130px 1fr 52px;
+  }
+}
+
+/* Selector de modo (botones contiguos) */
+.selector {
+  display: flex;
+  border: 1px solid var(--linea);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.selector button {
+  flex: 1;
+  padding: 7px 6px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--tinta-2);
+  background: none;
+  border: none;
+  border-left: 1px solid var(--linea);
+  cursor: pointer;
+}
+
+.selector button:first-child {
+  border-left: none;
+}
+
+.selector button.activa {
+  color: var(--superficie);
+  background: var(--tinta);
+}
+
+.selector button:focus-visible {
+  outline: 2px solid var(--azul);
+  outline-offset: -2px;
+}
+
+/* Rampa de altura de la leyenda */
+.rampa {
+  width: 180px;
+  height: 10px;
+  border-radius: 4px;
+  background: linear-gradient(to right, rgb(84, 130, 96), rgb(170, 190, 130) 45%, rgb(214, 198, 150) 75%, rgb(176, 140, 110));
+}
+
+.rampa-extremos {
+  display: flex;
+  justify-content: space-between;
+  color: var(--tinta-2);
+}
+
+/* Leyenda del mapa de calor */
+.leyenda-calor {
+  width: 300px;
+}
+
+.degradado {
+  height: 12px;
+  border-radius: 4px;
+  background: linear-gradient(to right, rgb(12, 163, 12), rgb(250, 178, 25), rgb(208, 59, 59));
+}
+
+.degradado-niveles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  color: var(--tinta-2);
+  font-size: 12px;
+}
+
+.degradado-niveles div {
+  display: flex;
+  flex-direction: column;
+}
+
+.degradado-niveles div:nth-child(2) {
+  text-align: center;
+}
+
+.degradado-niveles div:nth-child(3) {
+  text-align: right;
+}
+
+.degradado-niveles strong {
+  font-size: 13px;
+  color: var(--tinta);
+}
+
+/* Botón de acción dentro del panel */
+.boton {
+  padding: 8px 12px;
+  font: inherit;
+  font-weight: 500;
+  color: var(--tinta);
+  background: var(--superficie);
+  border: 1px solid var(--tinta-3);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.boton:hover {
+  background: var(--plano);
+}
+
+.boton:focus-visible {
+  outline: 2px solid var(--azul);
+  outline-offset: 2px;
+}
+
+/* Botón flotante sobre el visor 3D */
+.boton-sobre-mapa {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(252, 252, 251, 0.94);
+}
+
+/* Control flotante sobre el visor 3D, arriba a la izquierda */
+.control-sobre-mapa {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 300px;
+  max-width: calc(100% - 160px);
+  padding: 10px 12px;
+  font-size: 13px;
+  background: rgba(252, 252, 251, 0.94);
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+}
+
+/* Casilla dentro del recuadro de ajustes del relieve */
+.control-sobre-mapa {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.casilla {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.casilla input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--tinta);
+}
+
+/* Panel lateral: presentación de la vista y bloques con icono */
+.panel-presentacion {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 2px 4px;
+}
+
+.bloque {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px 14px;
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  border-radius: 12px;
+}
+
+.bloque-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.bloque-cabecera h3 {
+  flex: 1;
+  font-size: 14.5px;
+}
+
+.bloque-icono {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  color: var(--tinta);
+  background: var(--plano);
+  border-radius: 8px;
+}
+
+.icono {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+/* De dónde salen los datos del bloque */
+.fuente {
+  flex: none;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #1d5fb0;
+  background: #eaf2fd;
+  border-radius: 999px;
+}
+
+.nota {
+  display: flex;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--tinta-2);
+}
+
+.nota .icono {
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  color: var(--tinta-3);
+}
+
+.bloque .tabla tr:last-child td {
+  border-bottom: none;
+}
+
+.bloque h4 {
+  margin-top: 2px;
+}
+
+/* Reparto de la población entre los tres niveles */
+.reparto {
+  display: flex;
+  gap: 2px;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.reparto span {
+  min-width: 0;
+}
+
+.tarjeta-nivel {
+  border-top-width: 3px;
+}
+
+.bloque .casilla {
+  font-size: 13.5px;
+}
+
+/* Personas que viven en el municipio del punto elegido */
+.personas-del-punto {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: var(--plano);
+  border-radius: 10px;
+}
+
+.personas-del-punto .bloque-icono {
+  background: var(--superficie);
+}
+
+.personas-del-punto div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  font-size: 13px;
+  color: var(--tinta-2);
+}
+
+.personas-del-punto strong {
+  font-size: 17px;
+  color: var(--tinta);
+}
+
+.personas-del-punto .fuente {
+  align-self: flex-start;
+}
+
+/* Modelo que se está viendo en la zona elegida */
+.modelo-activo {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  font-size: 12.5px;
+  color: var(--tinta-2);
+  background: var(--plano);
+  border-left: 3px solid var(--azul);
+  border-radius: 6px;
+}
+
+.modelo-activo strong {
+  font-size: 13.5px;
+  color: var(--tinta);
+}
+
+/* Estimación con su rango (viviendas afectadas) */
+.estimacion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12.5px;
+  color: var(--tinta-2);
+}
+
+.estimacion strong {
+  font-size: 26px;
+  font-weight: 650;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--tinta);
+}
+
+.rango {
+  position: relative;
+  height: 10px;
+  background: var(--plano);
+  border-radius: 5px;
+}
+
+.rango-tramo {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: #9ec5f4;
+  border-radius: 5px;
+}
+
+.rango-centro {
+  position: absolute;
+  top: -3px;
+  width: 4px;
+  height: 16px;
+  margin-left: -2px;
+  background: var(--tinta);
+  border-radius: 2px;
+}
+
+.rango-escala {
+  display: flex;
+  justify-content: space-between;
+  margin-top: -6px;
+  font-size: 11px;
+  color: var(--tinta-3);
+}
+
+/* Pestañas de la sección «El modelo» */
+.selector-de-modelo {
+  max-width: 620px;
+  margin: 14px 0 6px;
+}
+
+/* Movimiento: las cifras y las barras cambian con suavidad al mover los controles */
+.reparto span,
+.barra-relleno,
+.rango-tramo,
+.rango-centro {
+  transition: flex-grow 0.35s ease, width 0.35s ease, left 0.35s ease;
+}
+
+.bloque {
+  animation: aparecer 0.25s ease both;
+}
+
+.tarjeta,
+.selector button,
+.pestanas button,
+.boton {
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
