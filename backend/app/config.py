@@ -8,7 +8,9 @@ ARTEFACTOS_DIR = Path(os.getenv("ARTEFACTOS_DIR", Path(__file__).resolve().paren
 
 # Orígenes que pueden llamar a la API desde el navegador, separados por comas.
 # En producción: la URL del frontend en Vercel.
-CORS_ORIGENES = [o.strip() for o in os.getenv("CORS_ORIGENES", "http://localhost:5173").split(",") if o.strip()]
+# Un origen no lleva barra final: el navegador envía «https://app.vercel.app», y con la barra no coincide.
+# Se quita por si la variable se escribió copiando la dirección tal como aparece en el navegador.
+CORS_ORIGENES = [o.strip().rstrip("/") for o in os.getenv("CORS_ORIGENES", "http://localhost:5173").split(",") if o.strip()]
 
 # Opcional: expresión regular para aceptar también las vistas previas de Vercel,
 # por ejemplo  https://centinelas-.*\.vercel\.app
@@ -18,6 +20,9 @@ CORS_ORIGEN_REGEX = os.getenv("CORS_ORIGEN_REGEX") or None
 # cada una: unos 1.100 m para todo Santander y unos 220 m para Los Santos
 ZONAS = ("santander", "los_santos")
 PASO_DE_MALLA_FINA = {"santander": 0.01, "los_santos": 0.002}
+
+# Rectángulo de la zona de Los Santos (las 30 celdas del modelo): sur, norte, oeste, este
+LIMITES_DE_LOS_SANTOS = (6.70, 6.95, -73.25, -72.95)
 
 # Zonas con clasificador de riesgo y sufijo de sus archivos: el de Los Santos (30 celdas)
 # y el de todo Santander son dos modelos distintos

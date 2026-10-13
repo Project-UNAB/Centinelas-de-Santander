@@ -18,7 +18,7 @@ const vistaInicial = (): Vista => VISTAS.find((v) => v.id === window.location.ha
 
 function SelectorDeVista({ vista, alCambiar }: { vista: Vista; alCambiar: (vista: Vista) => void }) {
   return (
-    <div className="selector" role="group" aria-label="Vista">
+    <div className="selector selector-de-vista" role="group" aria-label="Vista">
       {VISTAS.map((v) => (
         <button key={v.id} className={v.id === vista ? 'activa' : undefined} aria-pressed={v.id === vista} onClick={() => alCambiar(v.id)}>
           {v.nombre}

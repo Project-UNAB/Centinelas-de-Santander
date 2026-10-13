@@ -186,7 +186,7 @@ def test_el_epicentro_mueve_la_sacudida(cliente):
 
 
 def test_sismos_simulados_se_parecen_a_los_reales(cliente):
-    reales = cliente.get("/api/sismos").json()
+    reales = cliente.get("/api/sismos", params={"zona": "los_santos"}).json()
     simulados = cliente.get("/api/simulador/sismos", params={"anios": 17, "semilla": 3}).json()
     modelo = simulados["modelo"]
 
@@ -212,3 +212,14 @@ def test_datos_del_mapa(cliente):
     assert len(cliente.get("/api/municipios").json()["features"]) == 87
     sismos = cliente.get("/api/sismos").json()
     assert len(sismos["lon"]) == len(sismos["profundidad_km"]) > 10000
+
+
+def test_sismos_de_cada_zona(cliente):
+    santander = cliente.get("/api/sismos", params={"zona": "santander"}).json()
+    los_santos = cliente.get("/api/sismos", params={"zona": "los_santos"}).json()
+    # En Los Santos solo quedan los sismos que caen dentro de sus 30 celdas
+    assert 10000 < len(los_santos["lon"]) < len(santander["lon"])
+    assert all(6.70 <= lat < 6.95 for lat in los_santos["lat"])
+    assert all(-73.25 <= lon < -72.95 for lon in los_santos["lon"])
+    assert min(santander["lat"]) < 6.0 and max(santander["lat"]) > 7.5
+    assert cliente.get("/api/sismos", params={"zona": "otra"}).status_code == 422

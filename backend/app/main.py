@@ -111,9 +111,12 @@ def poblacion():
 
 
 @app.get("/api/sismos", tags=["general"])
-def sismos():
-    """Hipocentros M>=2.5 desde 2010 (los que usa el modelo), en columnas."""
-    return recursos.sismos()
+def sismos(zona: Literal["santander", "los_santos"] = "santander"):
+    """
+    Hipocentros M>=2.5 desde 2010, en columnas: los de todo Santander o solo
+    los que caen dentro de la zona de Los Santos.
+    """
+    return recursos.sismos_de_zona(zona)
 
 
 @app.get("/api/relieve/{zona}", tags=["general"])

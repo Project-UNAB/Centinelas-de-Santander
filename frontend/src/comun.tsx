@@ -209,3 +209,55 @@ export function Nota({ children }: { children: ReactNode }) {
     </p>
   );
 }
+
+interface PropsDePanelDesplegable {
+  children: ReactNode;
+  titulo?: string;
+  className?: string;
+}
+
+/**
+ * Panel lateral en escritorio y panel desplegable ("bottom sheet") en móvil.
+ * En móvil se puede esconder para ver el mapa 3D completo o desplegar para ver y
+ * cambiar todas las opciones de simulación y datos.
+ */
+export function PanelDesplegable({ children, titulo = 'Información y controles', className = '' }: PropsDePanelDesplegable) {
+  const [desplegado, setDesplegado] = useState(false);
+
+  return (
+    <aside className={`panel ${desplegado ? 'panel-desplegado' : 'panel-colapsado'} ${className}`.trim()}>
+      <button
+        type="button"
+        className="barra-toggle-panel"
+        onClick={() => setDesplegado((prev) => !prev)}
+        aria-expanded={desplegado}
+        aria-label={desplegado ? 'Esconder panel' : 'Desplegar panel'}
+      >
+        <span className="manija-panel" aria-hidden="true" />
+        <div className="barra-toggle-info">
+          <Icono nombre="capas" />
+          <span className="barra-toggle-titulo">{titulo}</span>
+        </div>
+        <span className="barra-toggle-accion">
+          {desplegado ? 'Esconder' : 'Desplegar'}
+          <svg
+            className={`flecha-toggle ${desplegado ? 'abierta' : ''}`}
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            stroke="currentColor"
+            fill="none"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </span>
+      </button>
+      <div className="panel-cuerpo">{children}</div>
+    </aside>
+  );
+}
+

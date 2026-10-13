@@ -131,9 +131,26 @@ input[type='range']:focus-visible {
   border-left: 1px solid var(--linea);
 }
 
-/* Si el contenido no cabe, el panel se desplaza: ningún elemento se aplasta */
-.panel > * {
+/* Si el contenido no cabe, el panel se desplaza: ningún elemento se aplasta.
+   El contenido va dentro de .panel-cuerpo, que en escritorio no genera caja propia */
+.panel > *,
+.panel-cuerpo > * {
   flex-shrink: 0;
+}
+
+/* El selector de vista (Riesgo por zona / Nido 3D) queda fijo arriba al desplazar el panel */
+.selector-de-vista {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--superficie);
+  box-shadow: 0 0 0 14px var(--plano), 0 16px 12px -6px rgba(11, 11, 11, 0.08);
+}
+
+.selector.selector-de-vista button {
+  padding: 9px 6px;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .panel h2,
@@ -484,28 +501,385 @@ h4 {
   gap: 0 32px;
 }
 
-/* Pantallas angostas: el panel pasa debajo del mapa */
+/* Componentes del panel desplegable y ajustes de mapa (en escritorio no se muestran como drawer) */
+.barra-toggle-panel {
+  display: none;
+}
+
+.panel-cuerpo {
+  display: contents;
+}
+
+.boton-sobre-mapa-toggle {
+  display: none;
+}
+
+.control-sobre-mapa-cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Pantallas angostas / móvil: cabecera compacta, mapa a pantalla completa y panel inferior desplegable */
 @media (max-width: 860px) {
+  /* Cabecera optimizada para móvil táctil */
+  .cabecera {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 8px 12px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .marca {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .marca h1 {
+    font-size: 16.5px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .marca span {
+    font-size: 11.5px;
+    color: var(--tinta-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Pestañas de navegación estilo segmented control */
+  .pestanas {
+    display: flex;
+    width: 100%;
+    background: var(--plano);
+    padding: 3px;
+    border-radius: 9px;
+    gap: 3px;
+  }
+
+  .pestanas button {
+    flex: 1;
+    min-height: 36px;
+    padding: 6px 4px;
+    font-size: 13px;
+    font-weight: 550;
+    text-align: center;
+    border-radius: 6px;
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .pestanas button.activa {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Vista: el mapa ocupa la pantalla y el panel se adhiere abajo */
   .vista {
-    grid-template-columns: 1fr;
-    grid-template-rows: 55vh auto;
-    height: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
   }
 
-  .contenido {
-    overflow-y: auto;
+  .mapa {
+    flex: 1;
+    height: 100%;
+    min-height: 0;
+    width: 100%;
+    position: relative;
   }
 
+  /* Panel inferior desplegable (bottom sheet) */
   .panel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     border-left: none;
     border-top: 1px solid var(--linea);
-    overflow-y: visible;
+    border-radius: 16px 16px 0 0;
+    background: var(--plano);
+    box-shadow: 0 -4px 22px rgba(0, 0, 0, 0.14);
+    z-index: 100;
+    padding: 0;
+    gap: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: height 0.3s cubic-bezier(0.2, 0.9, 0.3, 1), max-height 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  .panel.panel-colapsado {
+    height: 48px;
+    max-height: 48px;
+  }
+
+  .panel.panel-desplegado {
+    height: 72vh;
+    max-height: 78vh;
+  }
+
+  /* Manija táctil y barra superior para desplegar/esconder */
+  .barra-toggle-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    background: var(--superficie);
+    border: none;
+    border-bottom: 1px solid var(--linea);
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    flex-shrink: 0;
+    text-align: left;
+    font-family: inherit;
+  }
+
+  .barra-toggle-panel:active {
+    background: var(--plano);
+  }
+
+  .manija-panel {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 38px;
+    height: 4px;
+    background: var(--tinta-3);
+    opacity: 0.5;
+    border-radius: 2px;
+  }
+
+  .barra-toggle-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 650;
+    color: var(--tinta);
+  }
+
+  .barra-toggle-info .icono {
+    width: 17px;
+    height: 17px;
+    color: var(--azul);
+  }
+
+  .barra-toggle-accion {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--tinta-2);
+    padding: 4px 8px;
+    background: var(--plano);
+    border: 1px solid var(--linea);
+    border-radius: 6px;
+  }
+
+  .flecha-toggle {
+    transition: transform 0.25s ease;
+  }
+
+  .flecha-toggle.abierta {
+    transform: rotate(180deg);
+  }
+
+  /* Contenido del panel inferior con scroll suave */
+  .panel-cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .panel-cuerpo > * {
+    flex-shrink: 0;
+  }
+
+  /* Botones sobre el visor 3D en móvil */
+  .boton-sobre-mapa {
+    top: 10px;
+    right: 10px;
+    padding: 7px 11px;
+    font-size: 13px;
+    border-radius: 8px;
+    z-index: 20;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .control-sobre-mapa {
+    top: 10px;
+    left: 10px;
+    width: auto;
+    max-width: calc(100% - 130px);
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+    z-index: 20;
+  }
+
+  .boton-sobre-mapa-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 11px;
+    font-size: 13px;
+    font-weight: 550;
+    color: var(--tinta);
+    background: rgba(252, 252, 251, 0.95);
+    border: 1px solid var(--linea);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .badge-exag {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--tinta-2);
+    background: var(--plano);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  .control-sobre-mapa-cuerpo {
+    display: none;
+    position: absolute;
+    top: 42px;
+    left: 0;
+    width: 280px;
+    max-width: calc(100vw - 32px);
+    padding: 12px;
+    background: rgba(252, 252, 251, 0.98);
+    border: 1px solid var(--linea);
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  }
+
+  .control-sobre-mapa.abierto-movil .control-sobre-mapa-cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* Leyenda flotante por encima del panel colapsado */
+  .leyenda {
+    bottom: 58px;
+    left: 10px;
+    max-width: calc(100% - 20px);
+    padding: 7px 10px;
+    font-size: 12px;
+    z-index: 30;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .leyenda-calor {
+    width: auto;
+    max-width: calc(100% - 20px);
+  }
+
+  .degradado-niveles {
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .degradado-niveles strong {
+    font-size: 12px;
+  }
+
+  /* Adaptación de tablas y tarjetas */
+  .tarjetas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tarjeta {
+    padding: 8px 10px;
+  }
+
+  .tarjeta-valor {
+    font-size: 17px;
+  }
+
+  .tabla {
+    font-size: 13.5px;
+  }
+
+  .tabla td,
+  .tabla th {
+    padding: 5px 3px;
+  }
+
+  .barra-fila {
+    font-size: 13.5px;
   }
 
   .barra-ancha {
-    grid-template-columns: 130px 1fr 52px;
+    grid-template-columns: 110px 1fr 48px;
+  }
+
+  /* Vista de modelos en móvil */
+  .modelos {
+    padding: 12px 14px 20px;
+  }
+
+  .modelos-cabecera {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .modelos-cabecera .selector {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .cifras {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cifra {
+    padding: 8px 10px;
+  }
+
+  .cifra strong {
+    font-size: 21px;
+  }
+
+  .cuadro {
+    padding: 12px 12px;
+  }
+
+  .barra-de-modelo {
+    grid-template-columns: minmax(90px, 1fr) 1fr 44px;
+    font-size: 12.5px;
   }
 }
+
+@media (max-width: 480px) {
+  .cifras {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 /* Selector de modo (botones contiguos) */
 .selector {
@@ -1055,14 +1429,206 @@ h4 {
   height: 12px;
 }
 
-/* En pantallas angostas los cuadros pasan a una columna y la página se desplaza */
+/* Adaptación de «Los modelos» en pantallas angostas y móviles */
 @media (max-width: 1100px) {
-  .cifras {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .cuadros-de-sismos,
   .cuadros-de-viviendas {
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 860px) {
+  .modelos {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 12px 14px 64px !important;
+    gap: 14px !important;
+  }
+
+  .modelos > * {
+    flex-shrink: 0 !important;
+  }
+
+  .modelos-cabecera {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .modelos-cabecera h2 {
+    font-size: 18px;
+  }
+
+  .modelos-cabecera span {
+    font-size: 12.5px;
+  }
+
+  .modelos-cabecera .selector {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100%;
+  }
+
+  .modelos-cabecera .selector button {
+    padding: 8px 4px;
+    font-size: 12.5px;
+    line-height: 1.25;
+  }
+
+  .modelos-resumen {
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+
+  /* Cifras en cuadrícula de 2 columnas compacta */
+  .cifras {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .cifras .cifra:nth-child(5) {
+    grid-column: 1 / -1 !important;
+  }
+
+  .cifra {
+    padding: 9px 12px !important;
+    border-radius: 10px !important;
+  }
+
+  .cifra strong {
+    font-size: 22px !important;
+    line-height: 1.15 !important;
+  }
+
+  .cifra span {
+    font-size: 11.5px !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Cuadros a altura natural completa sin aplastarse */
+  .cuadros,
+  .cuadros-de-sismos,
+  .cuadros-de-viviendas {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    flex: none !important;
+    min-height: auto !important;
+    height: auto !important;
+    gap: 14px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .cuadro {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: none !important;
+    min-height: auto !important;
+    height: auto !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 14px 14px !important;
+    border-radius: 12px !important;
+    gap: 10px !important;
+  }
+
+  .cuadro h3 {
+    font-size: 15.5px;
+  }
+
+  .cuadro h4 {
+    font-size: 13.5px;
+  }
+
+  .cuadro-texto {
+    font-size: 13.5px;
+  }
+
+  .cuadro-nota {
+    font-size: 12px;
+  }
+
+  .veredicto {
+    font-size: 13px;
+    line-height: 1.4;
+    padding: 8px 10px;
+  }
+
+  /* Tablas legibles completas dentro de cada cuadro */
+  .cuadro .tabla {
+    display: table !important;
+    width: 100% !important;
+    min-width: 280px !important;
+  }
+
+  .cuadro .tabla th,
+  .cuadro .tabla td {
+    font-size: 12.5px !important;
+    padding: 6px 5px !important;
+  }
+
+  .cuadro .tabla td.num,
+  .cuadro .tabla th.num {
+    white-space: nowrap !important;
+    text-align: right;
+  }
+
+  .cuadro .matriz td,
+  .cuadro .matriz th {
+    white-space: nowrap !important;
+    text-align: center;
+  }
+
+  .cuadro .matriz td.num,
+  .cuadro .matriz th.num {
+    text-align: right !important;
+  }
+
+  /* Barras de importancia en móvil */
+  .barra-de-modelo {
+    grid-template-columns: minmax(100px, 1.2fr) 1fr 44px !important;
+    gap: 6px !important;
+    font-size: 12px !important;
+  }
+
+  .barra-de-modelo .barra-nombre {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-size: 11.5px !important;
+  }
+
+  .barra-de-modelo .barra-valor {
+    font-size: 11.5px !important;
+  }
+
+  .barra-de-modelo .barra-pista {
+    height: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modelos-cabecera .selector {
+    flex-direction: column !important;
+  }
+
+  .modelos-cabecera .selector button {
+    border-left: none !important;
+    border-top: 1px solid var(--linea) !important;
+    padding: 8px 8px !important;
+    font-size: 13px !important;
+  }
+
+  .modelos-cabecera .selector button:first-child {
+    border-top: none !important;
+  }
+}
+
+

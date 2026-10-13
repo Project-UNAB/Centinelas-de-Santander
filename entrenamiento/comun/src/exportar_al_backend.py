@@ -35,7 +35,8 @@ import preparar_danos  # noqa: E402
 
 SANTANDER_DIR = BASE_DIR / "2_sismos_santander"
 VIVIENDAS_DIR = BASE_DIR / "3_viviendas_y_costos"
-from entrenar_modelo_sismico_los_santos import GRILLA_GEOJSON, HISTORIAL_JSON, METRICAS_JSON, MODELO_PKL, preparar_catalogo
+from entrenar_modelo_sismico_los_santos import (ANIO_INICIO, GRILLA_GEOJSON, HISTORIAL_JSON, MAGNITUD_MINIMA, METRICAS_JSON, MODELO_PKL,
+                                                preparar_catalogo)
 import entrenar_modelo_sacudida as sacudida
 from entrenar_modelo_sacudida import GRID_STEP as PASO_SIMULADOR
 
@@ -121,6 +122,24 @@ def exportar_relieve(zona, silueta=None):
         # Metros sobre el nivel del mar, fila por fila de norte a sur
         'elevaciones': np.where(dentro, elevacion, SIN_RELIEVE).ravel().tolist(),
     })
+
+
+def exportar_sismos():
+    """
+    Hipocentros del catálogo homogéneo (M>=2.5 desde 2010), en columnas:
+      - sismos.json            los de Los Santos y su margen: con ellos se genera el catálogo sintético
+      - sismos_santander.json  los de todo Santander: los que dibuja la vista 3D del nido
+    """
+    catalogo = cargar_catalogo()
+    homogeneo = catalogo[(catalogo['utc_time'].dt.year >= ANIO_INICIO) & (catalogo['magnitude'] >= MAGNITUD_MINIMA)]
+    for nombre, cat in (("sismos.json", preparar_catalogo(catalogo)), ("sismos_santander.json", homogeneo)):
+        guardar_json(nombre, {
+            'lon': cat['longitude'].round(DECIMALES).tolist(),
+            'lat': cat['latitude'].round(DECIMALES).tolist(),
+            'profundidad_km': cat['depth'].round(0).astype(int).tolist(),
+            'magnitud': cat['magnitude'].round(1).tolist(),
+            'anio': cat['utc_time'].dt.year.tolist(),
+        })
 
 
 def exportar_sismos_reales():
@@ -249,15 +268,7 @@ def main():
     limites['geometry'] = limites.geometry.set_precision(10 ** -DECIMALES)
     guardar_json("municipios.geojson", json.loads(limites.to_json(drop_id=True)))
 
-    # Hipocentros del catálogo homogéneo, para la vista 3D del nido
-    cat = preparar_catalogo(cargar_catalogo())
-    guardar_json("sismos.json", {
-        'lon': cat['longitude'].round(DECIMALES).tolist(),
-        'lat': cat['latitude'].round(DECIMALES).tolist(),
-        'profundidad_km': cat['depth'].round(0).astype(int).tolist(),
-        'magnitud': cat['magnitude'].round(1).tolist(),
-        'anio': cat['utc_time'].dt.year.tolist(),
-    })
+    exportar_sismos()
 
     exportar_sismos_reales()
     exportar_poblacion(municipios)

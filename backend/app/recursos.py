@@ -6,7 +6,7 @@ from functools import lru_cache
 import joblib
 import numpy as np
 
-from .config import ARTEFACTOS_DIR, PASO_DE_MALLA_FINA, ZONAS, ZONAS_DE_RIESGO
+from .config import ARTEFACTOS_DIR, LIMITES_DE_LOS_SANTOS, PASO_DE_MALLA_FINA, ZONAS, ZONAS_DE_RIESGO
 
 
 def _leer_json(nombre):
@@ -57,7 +57,20 @@ def municipios():
 
 @lru_cache
 def sismos():
+    """Sismos de Los Santos y su margen: con ellos se genera el catálogo sintético."""
     return _leer_json("sismos.json")
+
+
+@lru_cache
+def sismos_de_zona(zona):
+    """Sismos reales que se dibujan en cada zona: todo Santander, o solo los que caen en Los Santos."""
+    catalogo = _leer_json("sismos_santander.json")
+    if zona == "santander":
+        return catalogo
+    sur, norte, oeste, este = LIMITES_DE_LOS_SANTOS
+    lat, lon = np.asarray(catalogo["lat"]), np.asarray(catalogo["lon"])
+    dentro = (lat >= sur) & (lat < norte) & (lon >= oeste) & (lon < este)
+    return {columna: np.asarray(valores)[dentro].tolist() for columna, valores in catalogo.items()}
 
 
 @lru_cache
@@ -128,4 +141,4 @@ def precargar():
     for zona in ZONAS_DE_RIESGO:
         modelo_riesgo(zona), grilla_riesgo(zona), metricas_clasificador(zona), historial_riesgo(zona)
     for zona in ZONAS:
-        malla_fina(zona)
+        malla_fina(zona), sismos_de_zona(zona)

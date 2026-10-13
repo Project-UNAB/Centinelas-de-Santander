@@ -1,44 +1,24 @@
 // Simulador: sacudida esperada para un sismo hipotético de magnitud y profundidad dadas,
-// pintada como mapa de calor sobre el relieve 3D. También reproduce sismos reales del nido
-// y los compara con lo que la población reportó en cada lugar.
+// pintada como mapa de calor sobre el relieve 3D. Aquí todo es simulado: no se muestran datos reales.
 
 import { COORDINATE_SYSTEM } from '@deck.gl/core';
 import { ScatterplotLayer } from '@deck.gl/layers';
 import DeckGL, { type DeckGLRef } from '@deck.gl/react';
 import { useMemo, useRef, useState, type ReactNode } from 'react';
-import { api, type SismoReal, type Zona } from '../api';
-import { Bloque, DENSIDAD_DE_PIXELES, Estado, EtiquetaDeNivel, LeyendaDeCalor, Nota, numero, porcentaje, useDatos } from '../comun';
-import { colorDeCalor, construirTextura, proyeccionDe } from '../relieve';
+import { api, type Zona } from '../api';
+import { Bloque, DENSIDAD_DE_PIXELES, Estado, EtiquetaDeNivel, LeyendaDeCalor, Nota, numero, PanelDesplegable, useDatos } from '../comun';
+import { construirTextura, proyeccionDe } from '../relieve';
 import {
   calorDeLaSacudida,
   ControlesDeEscenario,
   enRomanos,
   MAGNITUD_INICIAL,
   nivelDeIntensidad,
-  posicionEnElDegradado,
   PROFUNDIDAD_INICIAL_KM,
   ResumenDeEscenario,
   useEscenario,
 } from './Escenario';
-import { alturaEn, AYUDA_DE_CAMARA, BotonCentrar, camaraOrbital, ControlDeExageracion, capaDeRelieve, CONTROL_ORBITAL, EXAGERACION_INICIAL, posicionEnEscena, PuntoElegido, SelectorDeZona, useBrillo, useRelieve, VISTA_ORBITAL, zonaInicial, type Punto } from './Relieve3D';
-
-/** Lo que la población reportó en un lugar durante un sismo real, y lo que da el modelo allí. */
-interface Observacion {
-  lon: number;
-  lat: number;
-  intensidad: number;
-  delModelo: number;
-  respuestas: number;
-}
-
-const NOMBRE_DE_ZONA: Record<Zona, string> = { santander: 'Santander', los_santos: 'la zona de Los Santos' };
-
-// Los sismos se fechan con la hora de Colombia, no con la del catálogo (UTC)
-const FORMATO_DE_FECHA = new Intl.DateTimeFormat('es-CO', { dateStyle: 'long', timeZone: 'America/Bogota' });
-const FORMATO_DE_HORA = new Intl.DateTimeFormat('es-CO', { timeStyle: 'short', timeZone: 'America/Bogota' });
-const fechaDe = (sismo: SismoReal) => FORMATO_DE_FECHA.format(new Date(sismo.fecha_utc));
-
-const conSigno = (valor: number, decimales: number) => `${valor > 0 ? '+' : valor < 0 ? '−' : ''}${numero(Math.abs(valor), decimales)}`;
+import { AYUDA_DE_CAMARA, BotonCentrar, camaraOrbital, ControlDeExageracion, capaDeRelieve, CONTROL_ORBITAL, EXAGERACION_INICIAL, posicionEnEscena, PuntoElegido, SelectorDeZona, useBrillo, useRelieve, VISTA_ORBITAL, zonaInicial, type Punto } from './Relieve3D';
 
 export default function VistaSimulador({ encabezado }: { encabezado?: ReactNode }) {
   const grilla = useDatos(api.grillaDelSimulador);
@@ -49,11 +29,7 @@ export default function VistaSimulador({ encabezado }: { encabezado?: ReactNode 
   const { relieve, malla, error: errorDelRelieve } = useRelieve(zona);
   const [magnitud, setMagnitud] = useState(MAGNITUD_INICIAL);
   const [profundidad, setProfundidad] = useState(PROFUNDIDAD_INICIAL_KM);
-  // Sismo real que se reproduce; sin él, el escenario es el de los controles
-  const reales = useDatos(api.sismosReales);
-  const [idDelReal, setIdDelReal] = useState('');
-  const real = reales.datos?.find((s) => s.id === idDelReal) ?? null;
-  const { mapa, error } = useEscenario(real?.magnitud ?? magnitud, real?.profundidad_km ?? profundidad, zona, true, real ?? undefined);
+  const { mapa, error } = useEscenario(magnitud, profundidad, zona, true);
   const [punto, setPunto] = useState<Punto | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_INICIAL);
   const deck = useRef<DeckGLRef>(null);
@@ -79,15 +55,6 @@ export default function VistaSimulador({ encabezado }: { encabezado?: ReactNode 
         : null,
     [relieve, municipios.datos, campo, cuadricula],
   );
-
-  // Lugares con reportes del sismo real que caen sobre el relieve que se está viendo
-  const observaciones = useMemo<Observacion[]>(() => {
-    if (!real || !relieve) return [];
-    const o = real.observaciones;
-    return o.lat
-      .map((lat, i) => ({ lon: o.lon[i], lat, intensidad: o.intensidad[i], delModelo: o.intensidad_del_modelo[i], respuestas: o.respuestas[i] }))
-      .filter((d) => alturaEn(relieve, [d.lon, d.lat]) !== null);
-  }, [real, relieve]);
 
   // La cámara inicial solo cambia con el relieve: si cambiara en cada dibujo, la vista se reiniciaría
   const [centrados, setCentrados] = useState(0);
@@ -120,29 +87,10 @@ export default function VistaSimulador({ encabezado }: { encabezado?: ReactNode 
 
   const capas = [
     capaDeRelieve(malla, textura, exageracion[zona], brillo),
-    // Intensidad observada en cada lugar, con el degradado del mapa de calor: donde el
-    // punto se confunde con el terreno que lo rodea, el modelo acertó
-    new ScatterplotLayer<Observacion>({
-      id: 'observaciones',
-      data: observaciones,
-      pickable: true,
-      parameters: { depthCompare: 'always' },
-      coordinateSystem: COORDINATE_SYSTEM.CARTESIAN,
-      billboard: true,
-      getPosition: (d) => posicionEnEscena(relieve, [d.lon, d.lat], exageracion[zona]),
-      updateTriggers: { getPosition: [exageracion[zona]] },
-      radiusUnits: 'pixels',
-      getRadius: 6.5,
-      getFillColor: (d) => colorDeCalor(posicionEnElDegradado(d.intensidad)),
-      stroked: true,
-      lineWidthUnits: 'pixels',
-      getLineWidth: 1.5,
-      getLineColor: [11, 11, 11],
-    }),
     new ScatterplotLayer<{ lon: number; lat: number; epicentro: boolean }>({
       id: 'marcas',
       data: [
-        { lon: (real ?? grilla.datos.epicentro).lon, lat: (real ?? grilla.datos.epicentro).lat, epicentro: true },
+        { lon: grilla.datos.epicentro.lon, lat: grilla.datos.epicentro.lat, epicentro: true },
         ...(punto && intensidadDelPunto !== null ? [{ lon: punto[0], lat: punto[1], epicentro: false }] : []),
       ],
       // Sin prueba de profundidad, para que el relieve no las tape
@@ -177,16 +125,6 @@ export default function VistaSimulador({ encabezado }: { encabezado?: ReactNode 
             setPunto(coordenada ? aLonLat(coordenada[0], coordenada[1]) : null);
           }}
           getCursor={({ isDragging }) => (isDragging ? 'grabbing' : 'crosshair')}
-          getTooltip={({ object, layer }) => {
-            if (layer?.id !== 'observaciones' || !object) return null;
-            const o = object as Observacion;
-            return {
-              text:
-                `La gente reportó: ${enRomanos(o.intensidad)} (${numero(o.intensidad, 1)})\n` +
-                `El modelo da: ${enRomanos(o.delModelo)} (${numero(o.delModelo, 1)})\n` +
-                `${o.respuestas} ${o.respuestas === 1 ? 'reporte' : 'reportes'}`,
-            };
-          }}
         />
         <BotonCentrar alPulsar={() => setCentrados(centrados + 1)} />
         <ControlDeExageracion
@@ -201,14 +139,13 @@ export default function VistaSimulador({ encabezado }: { encabezado?: ReactNode 
         />
       </div>
 
-      <aside className="panel">
+      <PanelDesplegable titulo="Simulación y controles">
         {encabezado}
         <div className="panel-presentacion">
           <h2>Riesgo por zona · sismo simulado</h2>
           <p className="apoyo">
-            {real
-              ? 'El mapa de calor es la sacudida que el modelo calcula para este sismo real. Los círculos de color son lo que la gente reportó de verdad.'
-              : '¿Qué pasaría si ocurriera un sismo en el Nido de Bucaramanga? No predice cuándo ocurrirá: calcula la sacudida que produciría en cada punto.'}
+            ¿Qué pasaría si ocurriera un sismo en el Nido de Bucaramanga? No predice cuándo ocurrirá: calcula la
+            sacudida que produciría en cada punto.
           </p>
         </div>
 
@@ -229,98 +166,17 @@ export default function VistaSimulador({ encabezado }: { encabezado?: ReactNode 
           <Nota>{AYUDA_DE_CAMARA} El punto negro es el epicentro.</Nota>
         </Bloque>
 
-        <Bloque icono="sismo" titulo={real ? 'Sismo real' : 'Sismo hipotético'} fuente={real ? 'USGS' : undefined}>
-          <label className="control">
-            <span>Reproducir un sismo real</span>
-            <select value={idDelReal} onChange={(e) => setIdDelReal(e.target.value)}>
-              <option value="">Ninguno: sismo hipotético</option>
-              {reales.datos?.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {fechaDe(s)} · M {numero(s.magnitud, 1)} · {s.respuestas} reportes
-                </option>
-              ))}
-            </select>
-          </label>
-          {reales.error && <p className="aviso">No se pudieron cargar los sismos reales: {reales.error}</p>}
-
-          {real ? (
-            <table className="tabla">
-              <tbody>
-                <tr>
-                  <td>Fecha (hora de Colombia)</td>
-                  <td className="num">
-                    {fechaDe(real)}, {FORMATO_DE_HORA.format(new Date(real.fecha_utc))}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Magnitud</td>
-                  <td className="num">
-                    {numero(real.magnitud, 1)} ({real.tipo_magnitud})
-                  </td>
-                </tr>
-                <tr>
-                  <td>Profundidad</td>
-                  <td className="num">{numero(real.profundidad_km, 1)} km</td>
-                </tr>
-                <tr>
-                  <td>Epicentro (lat, lon)</td>
-                  <td className="num">
-                    {real.lat.toFixed(4)}, {real.lon.toFixed(4)}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          ) : (
-            <ControlesDeEscenario
-              limites={grilla.datos.limites}
-              magnitud={magnitud}
-              profundidad={profundidad}
-              alCambiarMagnitud={setMagnitud}
-              alCambiarProfundidad={setProfundidad}
-            />
-          )}
+        <Bloque icono="sismo" titulo="Sismo hipotético">
+          <ControlesDeEscenario
+            limites={grilla.datos.limites}
+            magnitud={magnitud}
+            profundidad={profundidad}
+            alCambiarMagnitud={setMagnitud}
+            alCambiarProfundidad={setProfundidad}
+          />
         </Bloque>
 
         <ResumenDeEscenario info={mapa.info} />
-
-        {real && (
-          <Bloque icono="diana" titulo="Cuánto se desvió el modelo" fuente="USGS · DYFI">
-            <table className="tabla">
-              <tbody>
-                <tr>
-                  <td>Lugares con reportes</td>
-                  <td className="num">
-                    {real.observaciones.lat.length} ({real.respuestas} personas)
-                  </td>
-                </tr>
-                <tr>
-                  <td>Desvío medio</td>
-                  <td className="num">
-                    {conSigno(real.desvio.sesgo, 1)} grados ({real.desvio.sesgo > 0 ? 'el modelo dio de más' : 'el modelo dio de menos'})
-                  </td>
-                </tr>
-                <tr>
-                  <td>Error medio por lugar</td>
-                  <td className="num">{numero(real.desvio.error_absoluto_medio, 1)} grados</td>
-                </tr>
-                <tr>
-                  <td>Lugares con error de 1 grado o menos</td>
-                  <td className="num">{porcentaje(real.desvio.dentro_de_1_grado)}</td>
-                </tr>
-              </tbody>
-            </table>
-            <Nota>
-              Cada círculo del mapa es un lugar donde la gente reportó lo que sintió, con el mismo degradado: si se
-              confunde con el terreno que lo rodea, el modelo acertó. Pasa el cursor por uno para comparar. Aquí se ven{' '}
-              {observaciones.length} de {real.observaciones.lat.length}; los demás quedan fuera de {NOMBRE_DE_ZONA[zona]},
-              pero también cuentan en el desvío.
-            </Nota>
-            <Nota>
-              El desvío se midió con el modelo calibrado sin este sismo: es su error ante un sismo que no había visto.
-              Magnitud, profundidad, epicentro y reportes: USGS, «Did You Feel It?».
-            </Nota>
-          </Bloque>
-        )}
 
         {punto && intensidadDelPunto !== null ? (
           <PuntoElegido
@@ -357,7 +213,7 @@ export default function VistaSimulador({ encabezado }: { encabezado?: ReactNode 
           expuestas y las viviendas afectadas cuentan todo Santander, aunque solo se vea Los Santos. Método: Zhao et al. (2006) y
           Worden et al. (2012), calibrado con 598 intensidades observadas por el USGS.
         </Nota>
-      </aside>
+      </PanelDesplegable>
     </div>
   );
 }

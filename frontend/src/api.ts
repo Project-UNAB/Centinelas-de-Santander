@@ -261,7 +261,8 @@ export const api = {
   historialDeRiesgo: (zona: Zona = 'los_santos') => pedirUnaVez<HistorialDeRiesgo>(`/api/riesgo/historial?zona=${zona}`),
   infoDelModeloDeViviendas: () => pedirUnaVez<InfoDelModeloDeViviendas>('/api/danos/modelo'),
   municipios: () => pedirUnaVez<Coleccion<Municipio>>('/api/municipios'),
-  sismos: () => pedirUnaVez<Sismos>('/api/sismos'),
+  /** Sismos reales de la zona: todo Santander, o solo los que caen en Los Santos. */
+  sismos: (zona: Zona) => pedirUnaVez<Sismos>(`/api/sismos?zona=${zona}`),
   poblacion: () => pedirUnaVez<Poblacion>('/api/poblacion'),
   /** Catálogo sintético. No se guarda en el navegador: hay muchas combinaciones y el backend ya las recuerda. */
   sismosSimulados: (anios: number, semilla: number, signal?: AbortSignal) =>

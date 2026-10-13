@@ -316,18 +316,33 @@ interface PropsDeAjustes {
 
 /** Recuadro sobre el visor, a la izquierda: altura del relieve y brillo. */
 export function ControlDeExageracion({ valor, alCambiar, brillo, alCambiarBrillo }: PropsDeAjustes) {
+  const [abiertoMovil, setAbiertoMovil] = useState(false);
+
   return (
-    <div className="control-sobre-mapa">
-      <label className="control">
-        <span>
-          Exageración vertical del relieve <strong>× {valor.toLocaleString('es-CO', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}</strong>
-        </span>
-        <input type="range" min={1} max={EXAGERACION_MAXIMA} step={0.1} value={valor} onChange={(e) => alCambiar(Number(e.target.value))} />
-      </label>
-      <label className="casilla">
-        <input type="checkbox" checked={brillo} onChange={(e) => alCambiarBrillo(e.target.checked)} />
-        <span>Brillo en el relieve</span>
-      </label>
+    <div className={`control-sobre-mapa ${abiertoMovil ? 'abierto-movil' : ''}`}>
+      <button
+        type="button"
+        className="boton boton-sobre-mapa-toggle"
+        onClick={() => setAbiertoMovil((prev) => !prev)}
+        aria-expanded={abiertoMovil}
+        aria-label="Ajustes de relieve 3D"
+      >
+        <Icono nombre="capas" />
+        <span>Relieve</span>
+        <span className="badge-exag">×{valor.toLocaleString('es-CO', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}</span>
+      </button>
+      <div className="control-sobre-mapa-cuerpo">
+        <label className="control">
+          <span>
+            Exageración vertical del relieve <strong>× {valor.toLocaleString('es-CO', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}</strong>
+          </span>
+          <input type="range" min={1} max={EXAGERACION_MAXIMA} step={0.1} value={valor} onChange={(e) => alCambiar(Number(e.target.value))} />
+        </label>
+        <label className="casilla">
+          <input type="checkbox" checked={brillo} onChange={(e) => alCambiarBrillo(e.target.checked)} />
+          <span>Brillo en el relieve</span>
+        </label>
+      </div>
     </div>
   );
 }

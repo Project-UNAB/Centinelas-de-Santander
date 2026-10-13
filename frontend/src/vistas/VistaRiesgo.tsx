@@ -7,7 +7,7 @@
 import DeckGL, { type DeckGLRef } from '@deck.gl/react';
 import { useMemo, useRef, useState, type ReactNode } from 'react';
 import { api, type Nivel, type PropiedadesDeCelda, type TrimestreDePrueba, type Zona } from '../api';
-import { Bloque, COLOR_NIVEL, css, DENSIDAD_DE_PIXELES, Estado, EtiquetaDeNivel, LeyendaDeCalor, NIVELES, Nota, numero, porcentaje, useDatos } from '../comun';
+import { Bloque, COLOR_NIVEL, css, DENSIDAD_DE_PIXELES, Estado, EtiquetaDeNivel, LeyendaDeCalor, NIVELES, Nota, numero, PanelDesplegable, porcentaje, useDatos } from '../comun';
 import { construirTextura, proyeccionDe, type CampoDeCalor, type Marco } from '../relieve';
 import { AYUDA_DE_CAMARA, BotonCentrar, camaraOrbital, ControlDeExageracion, capaDelPunto, capaDeRelieve, CONTROL_ORBITAL, EXAGERACION_INICIAL, PuntoElegido, SelectorDeZona, useBrillo, useRelieve, VISTA_ORBITAL, zonaInicial, type Punto } from './Relieve3D';
 
@@ -158,7 +158,7 @@ export default function VistaRiesgo({ encabezado }: { encabezado?: ReactNode }) 
         />
       </div>
 
-      <aside className="panel">
+      <PanelDesplegable titulo="Riesgo y controles">
         {encabezado}
         <div className="panel-presentacion">
           <h2>Riesgo por zona · datos reales</h2>
@@ -302,7 +302,7 @@ export default function VistaRiesgo({ encabezado }: { encabezado?: ReactNode }) 
           El modelo predice por celdas de 5,5 km (las {numero(elegibles.length)} de la lista). El degradado suaviza el paso de una celda a otra
           para que se lea mejor; no añade precisión al modelo. Fuera de la zona del modelo el relieve se ve sin color.
         </Nota>
-      </aside>
+      </PanelDesplegable>
     </div>
   );
 }

@@ -10,7 +10,7 @@ import DeckGL from '@deck.gl/react';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { api, type Sismos, type SismosSimulados, type Zona } from '../api';
 import { colorDeCalor, construirTextura } from '../relieve';
-import { Bloque, css, DENSIDAD_DE_PIXELES, Estado, NIVELES, Nota, numero, useDatos } from '../comun';
+import { Bloque, css, DENSIDAD_DE_PIXELES, Estado, NIVELES, Nota, numero, PanelDesplegable, useDatos } from '../comun';
 import { calorDeLaSacudida, ControlesDeEscenario, MAGNITUD_INICIAL, PROFUNDIDAD_INICIAL_KM, ResumenDeEscenario, useEscenario } from './Escenario';
 import { BotonCentrar, ControlDeExageracion, materialDelRelieve, SelectorDeZona, useBrillo, useRelieve, zonaInicial } from './Relieve3D';
 
@@ -67,6 +67,8 @@ interface Punto {
   magnitud: number;
   profundidad: number;
   anio: number;
+  lon: number;
+  lat: number;
 }
 
 interface Props {
@@ -92,14 +94,14 @@ export default function VistaNido3D({ modo, encabezado }: Props) {
   const [exageracion, setExageracion] = useState(EXAGERACION_DEL_RELIEVE);
   const camara = useMemo(() => ({ ...CAMARA[zona], centrados }), [zona, centrados]);
 
-  // Sismos que se muestran: los reales, o el catálogo sintético para los años y la semilla elegidos
+  // Sismos que se muestran: los reales de la zona, o el catálogo sintético para los años y la semilla elegidos
   const [sismos, setSismos] = useState<Sismos | SismosSimulados | null>(null);
   const [errorDeSismos, setErrorDeSismos] = useState<string | null>(null);
   useEffect(() => {
     const control = new AbortController();
     const alFallar = (e: Error) => e.name !== 'AbortError' && setErrorDeSismos(e.message);
     if (!simulando) {
-      api.sismos().then((s) => !control.signal.aborted && setSismos(s)).catch(alFallar);
+      api.sismos(zona).then((s) => !control.signal.aborted && setSismos(s)).catch(alFallar);
       return () => control.abort();
     }
     // Al arrastrar el control de años solo se pide la simulación donde se detiene
@@ -110,19 +112,25 @@ export default function VistaNido3D({ modo, encabezado }: Props) {
       clearTimeout(espera);
       control.abort();
     };
-  }, [simulando, anios, semilla]);
+  }, [simulando, zona, anios, semilla]);
 
   const puntos = useMemo<Punto[]>(() => {
     if (!sismos) return [];
+    // En Los Santos solo se dibujan los sismos que caen bajo su relieve; los reales ya llegan filtrados
+    const enLaZona = (lon: number, lat: number) =>
+      zona === 'santander' || !relieve || (lon >= relieve.lon_oeste && lon < relieve.lon_este && lat >= relieve.lat_sur && lat < relieve.lat_norte);
     return sismos.lon
       .map((lon, i) => ({
         posicion: aKm(lon, sismos.lat[i], sismos.profundidad_km[i]),
         magnitud: sismos.magnitud[i],
         profundidad: sismos.profundidad_km[i],
         anio: sismos.anio[i],
+        lon,
+        lat: sismos.lat[i],
       }))
+      .filter((p) => enLaZona(p.lon, p.lat))
       .sort((a, b) => a.magnitud - b.magnitud); // los mayores se dibujan encima
-  }, [sismos]);
+  }, [sismos, zona, relieve]);
 
   const visibles = useMemo(() => puntos.filter((p) => p.magnitud >= magnitudMinima), [puntos, magnitudMinima]);
 
@@ -289,14 +297,16 @@ export default function VistaNido3D({ modo, encabezado }: Props) {
         </div>
       </div>
 
-      <aside className="panel">
+      <PanelDesplegable titulo="Nido 3D y controles">
         {encabezado}
         <div className="panel-presentacion">
           <h2>Nido 3D · {simulando ? 'sismos simulados' : 'datos reales'}</h2>
           <p className="apoyo">
             {simulando
               ? 'Cada punto azul es un sismo simulado: no ocurrió, pero sigue la misma tasa, ubicación y magnitudes que el catálogo real.'
-              : 'Cada punto azul es un sismo real del catálogo del SGC, a su profundidad.'}
+              : zona === 'santander'
+                ? 'Cada punto azul es un sismo real del catálogo del SGC, a su profundidad. Se muestran los de todo Santander.'
+                : 'Cada punto azul es un sismo real del catálogo del SGC, a su profundidad. Se muestran solo los que ocurrieron bajo la zona de Los Santos.'}
           </p>
         </div>
 
@@ -362,7 +372,7 @@ export default function VistaNido3D({ modo, encabezado }: Props) {
             {mapa ? <ResumenDeEscenario info={mapa.info} /> : <Estado error={escenario.error} />}
           </>
         )}
-      </aside>
+      </PanelDesplegable>
     </div>
   );
 }
